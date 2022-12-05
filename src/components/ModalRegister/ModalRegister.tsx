@@ -44,11 +44,12 @@ export default function ModalRegister() {
   });
 
   const onSubmitFunction = (data: IRegisterPerson) => {
+    console.log(data);
     api
-      .post("register", {
+      .post("/register/institution", {
         name: data.name,
         cnpj: data.cnpj,
-        adress: data.adress,
+        address: data.adress,
         phone: data.phone,
         email: data.email,
         password: data.password,

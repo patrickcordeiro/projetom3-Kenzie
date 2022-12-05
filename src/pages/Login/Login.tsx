@@ -38,7 +38,7 @@ export default function Login() {
 
   const onSubmitFunction = (data: ILoginPerson) => {
     api
-      .post("login", {
+      .post("/login", {
         email: data.email,
         password: data.password,
       })

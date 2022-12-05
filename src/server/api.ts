@@ -1,7 +1,7 @@
-import axios from "axios"
+import axios from "axios";
 
 const api = axios.create({
-  baseURL: 'https://projetom3grupo5.herokuapp.com/',
+  baseURL: "http://localhost:3000",
   timeout: 5000,
 });
 
