@@ -43,11 +43,13 @@ export default function Login() {
         password: data.password,
       })
       .then((res) => {
+        console.log(res);
         if (res.status === 200) {
-          const { user, accessToken } = res.data;
-          api.defaults.headers.common.authorization = `Bearer ${accessToken}`;
-          localStorage.setItem("@TOKEN", accessToken);
-          localStorage.setItem("@userId", user.id);
+          // const { user, accessToken } = res.data;
+          const { token } = res.data;
+          api.defaults.headers.common.authorization = `Bearer ${token}`;
+          localStorage.setItem("@TOKEN", token);
+          // localStorage.setItem("@userId", user.id);
           toast.success("Login realizado com sucesso", {
             autoClose: 1500,
             toastId: customId,

@@ -71,7 +71,7 @@ export default function CardUsuario() {
           Endereço:{" "}
           <input
             type="text"
-            placeholder={user.adress === "" ? "Não informado" : user.adress}
+            placeholder={user.adress === "" ? "Não informado" : user.address}
             readOnly={!save && true}
             {...register("adress")}
           />

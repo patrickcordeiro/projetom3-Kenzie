@@ -3,6 +3,7 @@ import { IRegisterPerson } from "../../pages/DashBoard/DashBoard";
 import api from "../../server/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import jwt from "jsonwebtoken";
 
 interface IHomelessProps {
   img: string;
@@ -147,7 +148,8 @@ export default function AuthProvider({ children }: IChildrenProps) {
     const userId = localStorage.getItem("@userId");
     const token = localStorage.getItem("@TOKEN");
     api.defaults.headers.common.authorization = `Bearer ${token}`;
-    api.get(`/users/${userId}`).then((res) => {
+    api.get(`/register/institution/profile`).then((res) => {
+      console.log(res);
       setUser(res.data);
     });
   }, [isLogin]);
