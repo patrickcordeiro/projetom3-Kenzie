@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { BsSearch } from "react-icons/bs";
 import { GrNext, GrPrevious } from "react-icons/gr";
 import { AuthContext } from "../../contexts/authContext/AuthContext";
@@ -35,9 +35,16 @@ export default function HomeLess() {
     setSearchFor,
     next,
     goBack,
+    setHomeLess,
   } = useContext(AuthContext);
 
   console.log(homeLess);
+  useEffect(() => {
+    api.get("/homeless").then((res) => {
+      console.log(res);
+      setHomeLess([...res.data]);
+    });
+  }, []);
 
   return (
     <ContainerHome>
@@ -83,8 +90,8 @@ export default function HomeLess() {
                       <figure>
                         <img
                           src={
-                            user.image?.includes("https")
-                              ? user.image
+                            user.picture?.includes("https")
+                              ? user.picture
                               : imgTeste
                           }
                           alt="Foto do usuario"
@@ -106,19 +113,21 @@ export default function HomeLess() {
                             </li>
                             <li>
                               {" "}
-                              <span> Local de registro: </span> {user.location}
+                              <span> Local de registro: </span>{" "}
+                              {user.institution.name}
                             </li>
                             <li>
                               {" "}
-                              <span> Voluntário: </span> {user.volunteer}
+                              <span> Voluntário: </span> {user.institution.name}
                             </li>
                             <li>
                               {" "}
-                              <span> Contato: </span> {user.contact}
+                              <span> Contato: </span> {user.institution.phone}
                             </li>
                             <li>
                               {" "}
-                              <span> Data: </span> {user.date}
+                              <span> Data: </span>{" "}
+                              {user.created_at?.split("-").reverse().join("-")}
                             </li>
                           </ul>
                         </figcaption>

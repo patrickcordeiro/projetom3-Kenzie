@@ -8,12 +8,12 @@ import api from "../../server/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-interface IRegisterPerson {
+export interface IRegisterPerson {
   name: string;
   age: string;
   cnpj: string;
   cpf: string;
-  adress: string;
+  address: string;
   phone: number;
   email: string;
   password: string;
@@ -55,7 +55,7 @@ export default function ModalRegister() {
       ? api.post("/register/institution", {
           name: data.name,
           cnpj: data.cnpj,
-          address: data.adress,
+          address: data.address,
           telephone: data.phone,
           email: data.email,
           password: data.password,
@@ -147,7 +147,7 @@ export default function ModalRegister() {
               <input
                 type="text"
                 placeholder="Informe o seu endereço"
-                {...register("adress")}
+                {...register("address")}
               />
 
               <label>Telefone</label>

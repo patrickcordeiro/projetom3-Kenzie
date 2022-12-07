@@ -10,6 +10,7 @@ import AnimatedPage from "../../components/AnimatedPage";
 import ResetPage from "../../components/AboutTeam/ResetPage";
 import { toast } from "react-toastify";
 import CardUsuario from "../../components/CardUsuario/CardUsuario";
+import { IRegisterPerson as IRegisterInstitution } from "../../components/ModalRegister/ModalRegister";
 
 interface IDataUserprops {
   adress: string;
@@ -21,17 +22,17 @@ interface IDataUserprops {
 }
 
 export interface IRegisterPerson {
-  id: number;
+  id?: number;
   name: string;
   age: number;
-  description: string;
-  location: string;
-  date: string;
-  volunteer: string;
-  image?: string;
-  contact: string;
-  userId: number;
-  user: IDataUserprops;
+  description?: string;
+  institution: IRegisterInstitution;
+  created_at?: string;
+  volunteer?: string;
+  picture: string;
+  contact?: string;
+  userId?: number;
+  user?: IDataUserprops;
 }
 
 export default function DashBoard() {
@@ -40,12 +41,12 @@ export default function DashBoard() {
   const schema = yup.object().shape({
     name: yup.string().required("Campo obrigatório"),
     age: yup.string().required("Campo obrigatório"),
-    description: yup.string().required("Campo obrigatório").max(70),
-    location: yup.string().required("Campo obrigatório"),
-    date: yup.string().required("Campo obrigatório"),
-    volunteer: yup.string().required("Campo obrigatório"),
-    image: yup.string(),
-    contact: yup.string().email().required("Campo obrigatório"),
+    description: yup.string().max(70),
+    institution: yup.string().required("Campo obrigatório"),
+    date: yup.string(),
+    volunteer: yup.string(),
+    picture: yup.string().required("Campo obrigatório"),
+    contact: yup.string().email(),
   });
 
   const {
@@ -57,19 +58,28 @@ export default function DashBoard() {
   });
 
   const onSubmit = (data: IRegisterPerson) => {
-    data.userId = userId;
+    // data.userId = userId;
+    const type = localStorage.getItem("@type");
 
-    api
-      .post("/database", data)
-      .then((res) => {
-        if (res.status === 201) {
-          toast.success("Cadastro realizado");
-        }
-      })
-      .catch((err) => {
-        console.error(err);
-        toast.error(`Ocorreu um erro. Tente novamente.`);
-      });
+    if (type === "volunteer") {
+      toast.error(
+        `È necessário estar vinculado a uma instituição para cadastrar um morador`
+      );
+      return;
+    } else {
+      api
+        .post("/homeless/register", data)
+        .then((res) => {
+          console.log(res);
+          if (res.status === 201) {
+            toast.success("Cadastro realizado");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+          toast.error(`Ocorreu um erro. Tente novamente.`);
+        });
+    }
   };
 
   return (
@@ -118,14 +128,16 @@ export default function DashBoard() {
                 <input
                   type="text"
                   placeholder="Identifique o local de registro"
-                  {...register("location")}
+                  {...register("institution")}
                 />
-                <p className="error-message">{errors.location?.message}</p>
+                <p className="error-message">
+                  {errors.institution?.name?.message}
+                </p>
               </div>
               <div className="input-container">
                 <label htmlFor="">Data de registro</label>
-                <input type="date" {...register("date")} />
-                <p className="error-message">{errors.date?.message}</p>
+                <input type="date" {...register("created_at")} />
+                <p className="error-message">{errors.created_at?.message}</p>
               </div>
 
               <div className="input-container">
@@ -142,7 +154,7 @@ export default function DashBoard() {
                 <input
                   type="text"
                   placeholder="Link para a imagem"
-                  {...register("image")}
+                  {...register("picture")}
                 />
               </div>
               <div className="input-container">

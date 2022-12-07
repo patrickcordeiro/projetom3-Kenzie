@@ -34,7 +34,7 @@ interface IUserConstext {
   isGoBackDisabled: boolean;
   isInstitution: boolean;
   isVolunteer: boolean;
-
+  setHomeLess: React.Dispatch<React.SetStateAction<IRegisterPerson[]>>;
   setIsVolunteer: (prevState: boolean) => boolean | void;
   setIsRegister: (prevState: boolean) => boolean | void;
   setIsLogin: (prevState: boolean) => boolean | void;
@@ -69,14 +69,16 @@ export default function AuthProvider({ children }: IChildrenProps) {
   const navigate = useNavigate();
   const [isInstitution, setIsInstitution] = useState(true);
   const [isVolunteer, setIsVolunteer] = useState(false);
+  const [homeLess, setHomeLess] = useState<IRegisterPerson[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
   useEffect(() => {
     const token = localStorage.getItem("@TOKEN");
     token ? setIsLogin(true) : setIsLogin(false);
+    console.log(`Instituição: ${isInstitution}`);
+    console.log(`Voluntário: ${isVolunteer}`);
   }, []);
-  const [homeLess, setHomeLess] = useState<IRegisterPerson[]>([]);
 
   function next() {
     api
@@ -185,6 +187,7 @@ export default function AuthProvider({ children }: IChildrenProps) {
         isRegister,
         isVolunteer,
 
+        setHomeLess,
         setIsVolunteer,
         setIsRegister,
         setIsLogin,

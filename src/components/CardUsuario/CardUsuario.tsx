@@ -1,37 +1,51 @@
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../contexts/authContext/AuthContext";
 import { CardUser, ButtonSalvar, ButtonEditar, ButtonCancelar } from "./style";
 import { useForm } from "react-hook-form";
 import api from "../../server/api";
 import { toast } from "react-toastify";
-
-interface IRegisterPerson {
-  name: string;
-  cnpj: string;
-  adress: string;
-  phone: number;
-  email: string;
-  password: string;
-}
+import { IRegisterPerson as IRegisterPersonComplete } from "../ModalRegister/ModalRegister";
 
 export default function CardUsuario() {
-  const { user, setIsLogin, isInstitution, isVolunteer } =
-    useContext(AuthContext);
+  const {
+    user,
+    setIsLogin,
+    isInstitution,
+    isVolunteer,
+    setIsInstitution,
+    setIsVolunteer,
+  } = useContext(AuthContext);
   const [save, setSave] = useState(false);
   console.log(user);
 
-  const { register, handleSubmit } = useForm<IRegisterPerson>();
+  const { register, handleSubmit } = useForm<IRegisterPersonComplete>();
 
-  const onSubmitForm = (data: IRegisterPerson) => {
-    api
-      .patch(`https://projetom3grupo5.herokuapp.com/users/${user.id}`, data)
-      .then((res) => {
-        console.log(res);
+  useEffect(() => {
+    const type = localStorage.getItem("@type");
+
+    if (type !== undefined) {
+      if (type === "institution") {
+        setIsVolunteer(false);
+        setIsInstitution(true);
+      } else {
+        setIsInstitution(false);
+        setIsVolunteer(true);
+      }
+    }
+  }, []);
+
+  const onSubmitForm = (data: IRegisterPersonComplete) => {
+    const type = localStorage.getItem("@type");
+
+    if (type === "institution") {
+      setIsVolunteer(false);
+      setIsInstitution(true);
+
+      api.patch("/register/institution/profile", data).then((res) => {
         if (res.status === 200) {
           toast.success("Usuário atualizado com sucesso!", {
             autoClose: 1500,
           });
-
           setTimeout(() => {
             setIsLogin(true);
             setSave(false);
@@ -40,6 +54,24 @@ export default function CardUsuario() {
           toast.error("Ops, algo deu errado", { autoClose: 1500 });
         }
       });
+    } else {
+      setIsInstitution(false);
+      setIsVolunteer(true);
+      api.patch("/volunteers/profile", data).then((res) => {
+        console.log(data);
+        if (res.status === 200) {
+          toast.success("Usuário atualizado com sucesso!", {
+            autoClose: 1500,
+          });
+          setTimeout(() => {
+            setIsLogin(true);
+            setSave(false);
+          }, 2000);
+        } else {
+          toast.error("Ops, algo deu errado", { autoClose: 1500 });
+        }
+      });
+    }
   };
 
   return (
@@ -56,9 +88,9 @@ export default function CardUsuario() {
           ) : (
             <ButtonEditar onClick={() => setSave(true)}>Editar</ButtonEditar>
           )}
-          Nome Instituição:{" "}
           {isInstitution && (
             <>
+              Nome Instituição:{" "}
               <input
                 type="text"
                 placeholder={user.name === "" ? "Não informado" : user.name}
@@ -76,10 +108,10 @@ export default function CardUsuario() {
               <input
                 type="text"
                 placeholder={
-                  user.adress === "" ? "Não informado" : user.address
+                  user.address === "" ? "Não informado" : user.address
                 }
                 readOnly={!save && true}
-                {...register("adress")}
+                {...register("address")}
               />
               Telefone:{" "}
               <input
@@ -99,6 +131,7 @@ export default function CardUsuario() {
           )}{" "}
           {isVolunteer && (
             <>
+              Nome Voluntário:{" "}
               <input
                 type="text"
                 placeholder={user.name === "" ? "Não informado" : user.name}
@@ -110,14 +143,14 @@ export default function CardUsuario() {
                 type="text"
                 placeholder={user.age === "" ? "Não informado" : user.age}
                 readOnly={!save && true}
-                {...register("email")}
+                {...register("age")}
               />
               CPF:{" "}
               <input
                 type="text"
                 placeholder={user.cpf === "" ? "Não informado" : user.cpf}
                 readOnly={!save && true}
-                {...register("cnpj")}
+                {...register("cpf")}
               />
               Telefone:{" "}
               <input
