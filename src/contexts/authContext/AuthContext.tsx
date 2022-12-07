@@ -32,10 +32,14 @@ interface IUserConstext {
   searchFor: string;
   isNextDisabled: boolean;
   isGoBackDisabled: boolean;
+  isInstitution: boolean;
+  isVolunteer: boolean;
 
+  setIsVolunteer: (prevState: boolean) => boolean | void;
   setIsRegister: (prevState: boolean) => boolean | void;
   setIsLogin: (prevState: boolean) => boolean | void;
   setIsModal: (prevState: boolean) => boolean | void;
+  setIsInstitution: (prevState: boolean) => boolean | void;
   user: IUser | any;
   setSearchFor: React.Dispatch<React.SetStateAction<string>>;
   next(): void;
@@ -63,6 +67,8 @@ export default function AuthProvider({ children }: IChildrenProps) {
   const [isGoBackDisabled, setIsGoBackDisabled] = useState(true);
   const [user, setUser] = useState({});
   const navigate = useNavigate();
+  const [isInstitution, setIsInstitution] = useState(true);
+  const [isVolunteer, setIsVolunteer] = useState(false);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
@@ -124,6 +130,8 @@ export default function AuthProvider({ children }: IChildrenProps) {
       toastId: customId,
     });
     setTimeout(() => {
+      // setIsLogin(false);
+      // setIsRegister(false);
       setIsLogin(false);
       setUser({});
       localStorage.clear();
@@ -145,13 +153,24 @@ export default function AuthProvider({ children }: IChildrenProps) {
   }, [nextPage]);
 
   useEffect(() => {
-    const userId = localStorage.getItem("@userId");
+    const type = localStorage.getItem("@type");
     const token = localStorage.getItem("@TOKEN");
     api.defaults.headers.common.authorization = `Bearer ${token}`;
-    api.get(`/register/institution/profile`).then((res) => {
-      console.log(res);
-      setUser(res.data);
-    });
+
+    type === "volunteer" &&
+      api.get(`/volunteers/profile`).then((res) => {
+        console.log(res.data);
+        setIsVolunteer(true);
+        setIsInstitution(false);
+        setUser(res.data);
+      });
+    type === "institution" &&
+      api.get(`/register/institution/profile`).then((res) => {
+        console.log(res.data);
+        setIsInstitution(true);
+        setIsVolunteer(false);
+        setUser(res.data);
+      });
   }, [isLogin]);
 
   return (
@@ -164,7 +183,9 @@ export default function AuthProvider({ children }: IChildrenProps) {
         isNextDisabled,
         isGoBackDisabled,
         isRegister,
+        isVolunteer,
 
+        setIsVolunteer,
         setIsRegister,
         setIsLogin,
         setIsModal,
@@ -174,6 +195,8 @@ export default function AuthProvider({ children }: IChildrenProps) {
         next,
         search,
         logout,
+        isInstitution,
+        setIsInstitution,
       }}
     >
       {children}

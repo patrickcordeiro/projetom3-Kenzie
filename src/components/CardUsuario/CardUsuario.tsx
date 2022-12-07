@@ -15,8 +15,10 @@ interface IRegisterPerson {
 }
 
 export default function CardUsuario() {
-  const { user, setIsLogin } = useContext(AuthContext);
+  const { user, setIsLogin, isInstitution, isVolunteer } =
+    useContext(AuthContext);
   const [save, setSave] = useState(false);
+  console.log(user);
 
   const { register, handleSubmit } = useForm<IRegisterPerson>();
 
@@ -55,40 +57,86 @@ export default function CardUsuario() {
             <ButtonEditar onClick={() => setSave(true)}>Editar</ButtonEditar>
           )}
           Nome Instituição:{" "}
-          <input
-            type="text"
-            placeholder={user.name === "" ? "Não informado" : user.name}
-            readOnly={!save && true}
-            {...register("name")}
-          />
-          CNPJ:{" "}
-          <input
-            type="text"
-            placeholder={user.cnpj === "" ? "Não informado" : user.cnpj}
-            readOnly={!save && true}
-            {...register("cnpj")}
-          />
-          Endereço:{" "}
-          <input
-            type="text"
-            placeholder={user.adress === "" ? "Não informado" : user.address}
-            readOnly={!save && true}
-            {...register("adress")}
-          />
-          Telefone:{" "}
-          <input
-            type="text"
-            placeholder={user.phone === "" ? "Não informado" : user.phone}
-            readOnly={!save && true}
-            {...register("phone")}
-          />
-          Email:{" "}
-          <input
-            type="text"
-            placeholder={user.email === "" ? "Não informado" : user.email}
-            readOnly={!save && true}
-            {...register("email")}
-          />
+          {isInstitution && (
+            <>
+              <input
+                type="text"
+                placeholder={user.name === "" ? "Não informado" : user.name}
+                readOnly={!save && true}
+                {...register("name")}
+              />
+              CNPJ:{" "}
+              <input
+                type="text"
+                placeholder={user.cnpj === "" ? "Não informado" : user.cnpj}
+                readOnly={!save && true}
+                {...register("cnpj")}
+              />
+              Endereço:{" "}
+              <input
+                type="text"
+                placeholder={
+                  user.adress === "" ? "Não informado" : user.address
+                }
+                readOnly={!save && true}
+                {...register("adress")}
+              />
+              Telefone:{" "}
+              <input
+                type="text"
+                placeholder={user.phone === "" ? "Não informado" : user.phone}
+                readOnly={!save && true}
+                {...register("phone")}
+              />
+              Email:{" "}
+              <input
+                type="text"
+                placeholder={user.email === "" ? "Não informado" : user.email}
+                readOnly={!save && true}
+                {...register("email")}
+              />
+            </>
+          )}{" "}
+          {isVolunteer && (
+            <>
+              <input
+                type="text"
+                placeholder={user.name === "" ? "Não informado" : user.name}
+                readOnly={!save && true}
+                {...register("name")}
+              />
+              Idade:{" "}
+              <input
+                type="text"
+                placeholder={user.age === "" ? "Não informado" : user.age}
+                readOnly={!save && true}
+                {...register("email")}
+              />
+              CPF:{" "}
+              <input
+                type="text"
+                placeholder={user.cpf === "" ? "Não informado" : user.cpf}
+                readOnly={!save && true}
+                {...register("cnpj")}
+              />
+              Telefone:{" "}
+              <input
+                type="text"
+                placeholder={
+                  user.telephone === "" ? "Não informado" : user.telephone
+                }
+                readOnly={!save && true}
+                {...register("phone")}
+              />
+              Email:{" "}
+              <input
+                type="text"
+                placeholder={user.email === "" ? "Não informado" : user.email}
+                readOnly={!save && true}
+                {...register("email")}
+              />
+            </>
+          )}
           {save && (
             <div>
               <ButtonSalvar type="submit" className="save">

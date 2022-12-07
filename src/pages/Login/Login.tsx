@@ -37,6 +37,7 @@ export default function Login() {
   });
 
   const onSubmitFunction = (data: ILoginPerson) => {
+    console.log(data);
     api
       .post("/login", {
         email: data.email,
@@ -46,10 +47,11 @@ export default function Login() {
         console.log(res);
         if (res.status === 200) {
           // const { user, accessToken } = res.data;
-          const { token } = res.data;
+          console.log(res.data.token);
+          const { token, type } = res.data.token;
           api.defaults.headers.common.authorization = `Bearer ${token}`;
           localStorage.setItem("@TOKEN", token);
-          // localStorage.setItem("@userId", user.id);
+          localStorage.setItem("@type", type);
           toast.success("Login realizado com sucesso", {
             autoClose: 1500,
             toastId: customId,

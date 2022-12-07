@@ -18,11 +18,11 @@ export const DivBack = styled.div`
   background-image: url("teaser_unfpa-debates_pop-sit-rua_interno 1.png");
   background-size: cover;
 
-  form {
+  section {
     display: flex;
     flex-direction: column;
     width: 90%;
-    max-height: 500px;
+    max-height: 60%;
     max-width: 400px;
     align-items: center;
     background-color: #fff;
@@ -42,47 +42,92 @@ export const DivBack = styled.div`
       font-size: 22px;
     }
 
-    label,
-    input {
-      width: 70%;
+    #toggle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      .toggle-buttons {
+        width: 139px;
+        height: 26px;
+        background-color: #16c0f0;
+        border-style: none;
+        border-radius: 8px;
+        font-size: 12px;
+        color: #fff;
+        margin-top: 5px;
+        text-decoration: none;
+      }
+      .toggle-buttons:hover {
+        background-color: #16c0f087;
+      }
     }
 
-    label {
-      color: #828282;
-      font-size: 12px;
-    }
+    form {
+      display: flex;
 
-    input {
-      border-style: none;
-      border-bottom: 1px solid gray;
-      padding: 3px;
-    }
+      flex-direction: column;
+      height: 100%;
+      width: 100%;
+      align-items: center;
+      justify-content: space-between;
 
-    label:nth-child(2) {
-      margin-top: 10px;
-    }
+      #form {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+      }
 
-    input::placeholder {
-      font-size: 10px;
-      color: rgba(130, 130, 130, 0.75);
-    }
+      label,
+      input {
+        width: 70%;
+      }
 
-    .register {
-      width: 139px;
-      height: 26px;
-      background-color: #16c0f0;
-      border-style: none;
-      border-radius: 8px;
-      font-size: 12px;
-      color: #fff;
-      margin-top: 5px;
-      text-decoration: none;
-    }
+      label {
+        color: #828282;
+        font-size: 12px;
+      }
 
-    button {
-      border-style: none;
-      background-color: transparent;
-      text-decoration: underline;
+      input {
+        border-style: none;
+        border-bottom: 1px solid gray;
+        padding: 3px;
+      }
+
+      label:nth-child(2) {
+        margin-top: 10px;
+      }
+
+      input::placeholder {
+        font-size: 10px;
+        color: rgba(130, 130, 130, 0.75);
+      }
+
+      .register {
+        width: 139px;
+        height: 26px;
+        background-color: #16c0f0;
+        border-style: none;
+        border-radius: 8px;
+        font-size: 12px;
+        color: #fff;
+        margin-top: 5px;
+        text-decoration: none;
+      }
+
+      #toggleLogin {
+        margin-bottom: 30px;
+
+        button {
+          border-style: none;
+          background-color: transparent;
+          text-decoration: underline;
+        }
+      }
     }
   }
   @media screen and (max-width: 768px) {
